@@ -5,7 +5,7 @@ version: 2.1
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  say-hello:
+  say_hello:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
     docker:
@@ -18,7 +18,7 @@ jobs:
           name: "Say hello"
           command: "echo Hello, World!"
           
-  print-variable:
+  print_variable:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
     docker:
@@ -31,34 +31,38 @@ jobs:
           name: "Print my name"
           command: echo ${CI_Name_Var}
   
-  print-to-file:
+  print_to_file:
     docker:
       - image: cimg/base:stable
     steps:
-      - checkout
       - run:
           name: "Print to file"
           command: echo ${CI_Name_Var} > output.txt
       - persist_to_workspace:
-          root: /tmp/dir
+          root: ~/
+          paths:
+            - output.txt
             
-  print-output-file:
+  print_output_file:
     docker:
       - image: cimg/base:stable
     steps:
-      - checkout
       - attach_workspace:
-          at: /tmp/dir
+          at: ~/
       - run:
           name: "Print from file"
-          command: cat output.txt
+          command: cat ~/output.txt
 
   
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  say-hello-workflow:
+  say_hello_workflow:
     jobs:
-      - say-hello
-      - print-variable
+      - say_hello
+      - print_variable
+      - print_to_file
+      - print_output_file:
+          requires:
+             - print_to_file
