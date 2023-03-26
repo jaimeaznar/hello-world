@@ -17,6 +17,7 @@ jobs:
       - run:
           name: "Say hello"
           command: "echo Hello, World!"
+          
   print-variable:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
@@ -29,6 +30,30 @@ jobs:
       - run:
           name: "Print my name"
           command: echo ${CI_Name_Var}
+  
+  print-to-file:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - run:
+          name: "Print to file"
+          command: echo ${CI_Name_Var} > output.txt
+      - persist_to_workspace:
+          root: /tmp/dir
+            
+  print-output-file:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/dir
+      - run:
+          name: "Print from file"
+          command: cat output.txt
+
+  
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
