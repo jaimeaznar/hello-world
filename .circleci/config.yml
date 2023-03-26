@@ -39,7 +39,7 @@ jobs:
           name: "Print to file"
           command: echo ${CI_Name_Var} > output.txt
       - persist_to_workspace:
-          root: ~/
+          root: ~/workspace
           paths:
             - output.txt
             
@@ -48,10 +48,10 @@ jobs:
       - image: cimg/base:stable
     steps:
       - attach_workspace:
-          at: ~/
+          at: ~/workspace
       - run:
           name: "Print from file"
-          command: cat ~/output.txt
+          command: cat ~/workspace/output.txt
 
   
 
