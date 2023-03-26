@@ -37,7 +37,7 @@ jobs:
       - checkout
       - run:
           name: "Print my name"
-          command: echo ${CI_Name_Var}
+          command: echo "${CI_Name_Var}"
       - print_pipeline_id
   
   print_to_file:
@@ -45,7 +45,7 @@ jobs:
     steps:
       - run:
           name: "Print to file"
-          command: echo ${CI_Name_Var} > output.txt
+          command: echo "${CI_Name_Var}" > output.txt
       - persist_to_workspace:
           root: .
           paths:
